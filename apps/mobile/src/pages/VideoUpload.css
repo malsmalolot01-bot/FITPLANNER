@@ -1,0 +1,295 @@
+/* Gigamit sa UploaderLogin.tsx ug VideoUpload.tsx. Tanang class naay "vu-" prefix para dili mo-clash sa lain nga CSS. */
+
+.vu-page,
+.vu-login-wrap {
+  --vu-bg: #f6f7f9;
+  --vu-surface: #ffffff;
+  --vu-text: #14202b;
+  --vu-muted: #5b6b7a;
+  --vu-border: #d8dee5;
+  --vu-accent: #0b6e4f;
+  --vu-accent-text: #ffffff;
+  --vu-accent-soft: #dff3ea;
+  --vu-danger: #b3261e;
+
+  box-sizing: border-box;
+  min-height: 100%;
+  background: var(--vu-bg);
+  color: var(--vu-text);
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  .vu-page,
+  .vu-login-wrap {
+    --vu-bg: #10161c;
+    --vu-surface: #18212a;
+    --vu-text: #e8eef3;
+    --vu-muted: #9aabba;
+    --vu-border: #2b3844;
+    --vu-accent: #3ecf9b;
+    --vu-accent-text: #07251a;
+    --vu-accent-soft: #15382c;
+    --vu-danger: #ff8a80;
+  }
+}
+
+.vu-page {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 20px 16px 48px;
+}
+
+.vu-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.vu-title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.vu-sub {
+  margin: 4px 0 0;
+  color: var(--vu-muted);
+  font-size: 0.95rem;
+}
+
+.vu-progress-total {
+  height: 6px;
+  margin: 16px 0;
+  border-radius: 3px;
+  background: var(--vu-border);
+  overflow: hidden;
+}
+
+.vu-progress-total-bar {
+  height: 100%;
+  background: var(--vu-accent);
+  transition: width 0.3s ease;
+}
+
+.vu-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.vu-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.vu-chip {
+  padding: 7px 14px;
+  border: 1px solid var(--vu-border);
+  border-radius: 999px;
+  background: var(--vu-surface);
+  color: var(--vu-text);
+  font: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.vu-chip-active {
+  border-color: var(--vu-accent);
+  background: var(--vu-accent-soft);
+  font-weight: 600;
+}
+
+.vu-input {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid var(--vu-border);
+  border-radius: 8px;
+  background: var(--vu-surface);
+  color: var(--vu-text);
+  font: inherit;
+}
+
+.vu-label {
+  display: block;
+  margin: 14px 0 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.vu-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.vu-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid var(--vu-border);
+  border-radius: 10px;
+  background: var(--vu-surface);
+}
+
+.vu-item-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+}
+
+.vu-item-name {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.vu-item-meta {
+  margin: 3px 0 0;
+  color: var(--vu-muted);
+  font-size: 0.85rem;
+}
+
+.vu-badge {
+  flex-shrink: 0;
+  padding: 3px 10px;
+  border: 1px solid var(--vu-border);
+  border-radius: 999px;
+  color: var(--vu-muted);
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.vu-badge-done {
+  border-color: transparent;
+  background: var(--vu-accent-soft);
+  color: var(--vu-accent);
+  font-weight: 600;
+}
+
+.vu-video {
+  width: 100%;
+  max-height: 320px;
+  border-radius: 8px;
+  background: #000;
+}
+
+.vu-file {
+  display: none;
+}
+
+.vu-btn {
+  padding: 10px 16px;
+  border: 1px solid var(--vu-border);
+  border-radius: 8px;
+  background: var(--vu-surface);
+  color: var(--vu-text);
+  font: inherit;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.vu-btn-primary {
+  border-color: var(--vu-accent);
+  background: var(--vu-accent);
+  color: var(--vu-accent-text);
+  font-weight: 600;
+}
+
+.vu-btn-block {
+  width: 100%;
+  margin-top: 18px;
+}
+
+.vu-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.vu-btn:focus-visible,
+.vu-chip:focus-visible,
+.vu-input:focus-visible {
+  outline: 2px solid var(--vu-accent);
+  outline-offset: 2px;
+}
+
+.vu-upload-progress {
+  position: relative;
+  width: 100%;
+  height: 26px;
+  border-radius: 6px;
+  background: var(--vu-border);
+  overflow: hidden;
+}
+
+.vu-upload-progress-bar {
+  height: 100%;
+  background: var(--vu-accent);
+  transition: width 0.15s linear;
+}
+
+.vu-upload-progress-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--vu-text);
+}
+
+.vu-ok {
+  margin: 8px 0;
+  color: var(--vu-accent);
+  font-size: 0.95rem;
+}
+
+.vu-error {
+  margin: 8px 0;
+  color: var(--vu-danger);
+  font-size: 0.95rem;
+}
+
+.vu-empty {
+  margin: 24px 0;
+  color: var(--vu-muted);
+  text-align: center;
+}
+
+/* Login */
+.vu-login-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+}
+
+.vu-login {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 380px;
+  padding: 24px;
+  border: 1px solid var(--vu-border);
+  border-radius: 12px;
+  background: var(--vu-surface);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vu-progress-total-bar,
+  .vu-upload-progress-bar {
+    transition: none;
+  }
+}

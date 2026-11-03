@@ -1,0 +1,303 @@
+import { IonContent, IonIcon, IonPage } from '@ionic/react';
+import { logOutOutline } from 'ionicons/icons';
+import { useState, useMemo, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { getCurrentUser, logout } from '../lib/auth';
+import { API_BASE_URL } from '../lib/apiConfig';
+import { useIsMobile } from '../lib/useIsMobile';
+import { getDaysLeft } from '../lib/trial';
+import ProgressMenu from '../components/ProgressMenu';
+import WorkoutVideoButton from '../components/WorkoutVideoButton';
+import { gymWorkouts, homeWorkouts, getPicksForDay, getIntensitySettings } from '../lib/workoutLibrary';
+import dashboardBg from '../assets/dashboard-bg.webp';
+import './Dashboard.css';
+
+const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const WEEKDAY_LABELS = ['S','M','T','W','T','F','S'];
+
+const Dashboard: React.FC = () => {
+  const navigate = useNavigate();
+  const isMobile = useIsMobile();
+  const [planTab, setPlanTab] = useState<'gym' | 'home'>('gym');
+  const [subscription, setSubscription] = useState<{ status: string; days_left: number; subscription_end: string | null } | null>(null);
+  const [subscriptionError, setSubscriptionError] = useState('');
+
+  useEffect(() => {
+    const user = getCurrentUser();
+    if (!user?.id || user.role === 'admin') return;
+
+    fetch(`${API_BASE_URL}/get_subscription.php`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Auth-Token': user.token,
+      },
+      body: JSON.stringify({ userId: user.id }),
+    })
+      .then(async (response) => {
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.message || 'Unable to load subscription status.');
+        setSubscription(result);
+      })
+      .catch((error: unknown) => {
+        console.error('Subscription status request failed:', error);
+        setSubscriptionError('Subscription status could not be loaded.');
+      });
+  }, []);
+
+const subscriptionEndDate = subscription?.subscription_end
+    ? new Date(subscription.subscription_end.replace(' ', 'T')).toLocaleDateString(undefined, {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      })
+    : '';
+
+  const daysLeft = getDaysLeft(subscription?.subscription_end, subscription?.days_left ?? 0);
+
+  const today = useMemo(() => {
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    return d;
+  }, []);
+  const [selectedDay, setSelectedDay] = useState<number>(today.getDate());
+
+  const handleLogout = () => {
+    logout();
+    // Redirect to login
+    navigate('/login');
+  };
+
+  // Kuhaa ang profile ug medical history para sa Today's Plan
+  const profile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+  const userGoal = profile.goal || 'Fitness';
+  const medicalHistory = JSON.parse(localStorage.getItem('medicalHistory') || '{}');
+  const userConditions: string[] = medicalHistory.conditions || [];
+  const userCategory: string = profile.category || '';
+
+  const intensitySettings = getIntensitySettings(profile.intensity);
+
+  // Calendar for the current month
+  const year = today.getFullYear();
+  const month = today.getMonth();
+  const firstWeekday = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  const selectedDate = new Date(year, month, selectedDay);
+  const dayOffset = Math.round((selectedDate.getTime() - today.getTime()) / 86400000);
+  const isToday = selectedDay === today.getDate();
+
+  const selectedGymPicks = getPicksForDay(gymWorkouts, dayOffset, userGoal, userConditions, userCategory, intensitySettings.pickCount, intensitySettings.restDays);
+  const selectedHomePicks = getPicksForDay(homeWorkouts, dayOffset, userGoal, userConditions, userCategory, intensitySettings.pickCount, intensitySettings.restDays);
+  const isRestDay = selectedGymPicks.isRest && selectedHomePicks.isRest;
+  const activePicks = planTab === 'gym' ? selectedGymPicks : selectedHomePicks;
+
+  const calendarCells: (number | null)[] = [
+    ...Array(firstWeekday).fill(null),
+    ...Array.from({ length: daysInMonth }, (_, i) => i + 1),
+  ];
+
+  const getDayOffsetFor = (day: number) =>
+    Math.round((new Date(year, month, day).getTime() - today.getTime()) / 86400000);
+
+  const isDayRest = (day: number) => {
+    const off = getDayOffsetFor(day);
+    const g = getPicksForDay(gymWorkouts, off, userGoal, userConditions, userCategory, intensitySettings.pickCount, intensitySettings.restDays);
+    const h = getPicksForDay(homeWorkouts, off, userGoal, userConditions, userCategory, intensitySettings.pickCount, intensitySettings.restDays);
+    return g.isRest && h.isRest;
+  };
+
+  return (
+    <IonPage>
+      <IonContent
+        fullscreen
+        className="db-shell"
+        style={{ '--db-bg-image': `url(${dashboardBg})` } as React.CSSProperties}
+      >
+        {subscriptionError && <p role="alert">{subscriptionError}</p>}
+        
+        {/* Top Header */}
+        <header className="db-top-header">
+          <div className="db-top-brand">Fit<span>Planner</span></div>
+          {!isMobile && (
+            <nav className="db-top-nav">
+              {[
+                { path: '/dashboard', label: 'Dashboard' },
+                { path: '/workout', label: 'AI Workout Suggestion' },
+                { path: '/meal-plan', label: 'Meal Plan' },
+                { path: '/ai-suggestion', label: 'BMI' },
+                { path: '/progress', label: 'Progress' },
+                { path: '/profile', label: 'Profile' },
+              ].map(({ path, label }) => path === '/progress' ? (
+                <ProgressMenu key={path} locked={subscription?.status === 'expired'} />
+              ) : subscription?.status === 'expired' ? (
+                <span key={path} className="db-top-nav-item" aria-disabled="true" style={{ opacity: 0.4, pointerEvents: 'none' }}>
+                  {label}
+                </span>
+              ) : (
+                <Link key={path} to={path} className={`db-top-nav-item ${path === '/dashboard' ? 'active' : ''}`}>
+                  {label}
+                </Link>
+              ))}
+            </nav>
+          )}
+          <button className="db-logout-btn" onClick={handleLogout} aria-label="Log Out">
+            <IonIcon icon={logOutOutline} style={{ fontSize: '32px', width: '32px', height: '32px' }} />
+          </button>
+        </header>
+
+        <div className="db-bg-wrapper">
+        <div className="db-container">
+          <header className="db-header">
+            <h1>Welcome to fitplanner </h1>
+            <p>Ready to break your limits today?</p>
+          </header>
+
+          {/* Subscription status */}
+          {subscription && subscription.status !== 'expired' && (
+            <div
+              role="status"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: 16,
+                padding: 20,
+                marginBottom: 24,
+                borderRadius: 12,
+                background: 'rgba(20, 20, 20, 0.92)',
+                border: '1px solid #2a2a2a',
+                borderLeft: `4px solid ${subscription.days_left <= 7 ? '#ef4444' : '#FF5E00'}`,
+              }}
+            >
+              <div style={{ flex: '1 1 260px' }}>
+                <span
+                  style={{
+                    fontSize: 12,
+                    fontWeight: 700,
+                    letterSpacing: 1.5,
+                    textTransform: 'uppercase',
+                    color: subscription.days_left <= 7 ? '#ef4444' : '#FF5E00',
+                  }}
+                >
+                  {subscription.status === 'trial' ? 'Free Trial' : 'Subscription Active'}
+                </span>
+                <div style={{ fontSize: 28, fontWeight: 800, color: '#fff', margin: '4px 0' }}>
+                  {daysLeft} days left
+                </div>
+                <p style={{ margin: 0, fontSize: 14, color: '#a1a1aa' }}>
+                  {subscription.status === 'trial'
+                    ? `Your free access ends on ${subscriptionEndDate}. Subscribe before then to keep using FitPlanner.`
+                    : `Your subscription is valid until ${subscriptionEndDate}. Renew anytime to add more days.`}
+                </p>
+              </div>
+              <Link
+                to="/subscription"
+                style={{
+                  padding: '10px 18px',
+                  borderRadius: 8,
+                  background: '#FF5E00',
+                  color: '#000',
+                  fontSize: 13,
+                  fontWeight: 700,
+                  letterSpacing: 1,
+                  textTransform: 'uppercase',
+                  textDecoration: 'none',
+                }}
+              >
+                {subscription.status === 'trial' ? 'Subscribe now' : 'Renew'}
+              </Link>
+            </div>
+          )}
+
+          {/* Quicklinks */}
+          <div className="db-quicklinks">
+            <Link to="/workout" className="db-link-card">
+              <h2>Workout</h2>
+              <p>View gym and home routines.</p>
+            </Link>
+            <Link to="/ai-suggestion" className="db-link-card">
+              <h2>AI Suggestion</h2>
+              <p>Calculate BMI and get a plan.</p>
+            </Link>
+          </div>
+
+          {/* Monthly Plan — calendar + selected day's workout */}
+          <h2 className="db-section-title">Monthly Plan</h2>
+
+          <div className="db-plan-layout">
+            <div className="db-calendar-card db-labeled-box" data-label="Calendar">
+              <div className="db-calendar-head">{MONTH_NAMES[month]} {year}</div>
+              <div className="db-calendar-weekdays">
+                {WEEKDAY_LABELS.map((d, i) => <span key={i}>{d}</span>)}
+              </div>
+              <div className="db-calendar-grid">
+                {calendarCells.map((day, i) => {
+                  if (day === null) return <span key={i} className="db-cal-cell empty" />;
+                  const rest = isDayRest(day);
+                  const isSelected = day === selectedDay;
+                  const isTodayCell = day === today.getDate();
+                  return (
+                    <button
+                      key={i}
+                      className={`db-cal-cell ${isSelected ? 'selected' : ''} ${isTodayCell ? 'today' : ''}`}
+                      onClick={() => setSelectedDay(day)}
+                    >
+                      {day}
+                      <span className={`db-cal-dot ${rest ? 'rest' : 'active'}`} />
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="db-workout-card">
+              <h3>{isToday ? "Today's Workout" : `Workout — ${MONTH_NAMES[month]} ${selectedDay}`}</h3>
+
+              {isRestDay ? (
+                <p className="db-rest-note">Rest day. Recover and come back stronger.</p>
+              ) : (
+                <>
+                  <div className="db-plan-toggle">
+                    <button
+                      className={`db-plan-toggle-btn ${planTab === 'gym' ? 'active' : ''}`}
+                      onClick={() => setPlanTab('gym')}
+                    >
+                      Gym
+                    </button>
+                    <button
+                      className={`db-plan-toggle-btn ${planTab === 'home' ? 'active' : ''}`}
+                      onClick={() => setPlanTab('home')}
+                    >
+                      Home
+                    </button>
+                  </div>
+
+                  {activePicks.picks.length === 0 ? (
+                    <p className="db-rest-note">No exercises available for your current profile.</p>
+                  ) : (
+                    activePicks.picks.map((wo) => (
+                      <div className="db-exercise-item" key={wo.name}>
+                        <span className="db-ex-left">
+  <span className="db-ex-name">{wo.name}</span>
+  <WorkoutVideoButton workoutName={wo.name} />
+</span>
+                        <span className="db-ex-meta">{wo.meta}</span>
+                      </div>
+                    ))
+                  )}
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      </IonContent>
+    </IonPage>
+  );
+};
+
+export default Dashboard;

@@ -1,0 +1,456 @@
+/* ==============================================
+   FIT PLANNER - REGISTER PAGE (Clean Hardcore Theme)
+============================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+.register-content {
+  --background: #0A0A0A;
+}
+
+/* ---------- TWO COLUMN SHELL ---------- */
+.register-shell {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 100vh;
+  font-family: 'Inter', sans-serif;
+}
+
+.register-container {
+  width: min(100%, 560px);
+  height: 100vh;
+  margin: 0 auto;
+  padding: 24px 28px 32px;
+  background: #0A0A0A;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.register-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.register-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.register-container::-webkit-scrollbar-thumb {
+  background: #2A2A2A;
+  border-radius: 10px;
+}
+
+.register-header {
+  max-width: 520px;
+  margin: 0 auto;
+  padding-top: 8px;
+}
+
+.register-header .brand-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.register-header .brand-icon {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  background: #FF5E00;
+  color: #000;
+  font-size: 24px;
+}
+
+.register-header h1 {
+  margin: 0;
+  color: #F5F5F5;
+  font-size: 1.8rem;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.register-header h1 span {
+  color: #FF5E00;
+}
+
+.register-header p {
+  margin: 4px 0 0;
+  color: #666;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+
+.register-heading {
+  max-width: 520px;
+  margin: 0 auto;
+  padding-top: 12px;
+}
+
+.register-heading h2 {
+  margin: 0;
+  color: #F5F5F5;
+  font-size: clamp(1.6rem, 3vw, 2rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.register-heading p {
+  margin: 8px 0 0;
+  color: #A3A3A3;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.register-form {
+  max-width: 520px;
+  margin: 14px auto 0;
+}
+
+.name-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.input-group {
+  margin-bottom: 10px;
+}
+
+.input-label {
+  display: block;
+  margin-bottom: 8px;
+  color: #888;
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+.input-item {
+  --background: #141414;
+  --border-color: #2A2A2A;
+  --border-width: 1px;
+  --border-radius: 6px; /* Clean slight rounding */
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --min-height: 42px;
+  --color: #F5F5F5;
+  --highlight-color-focused: #FF5E00;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.input-item.ion-focused, .input-item.item-interactive:focus-within {
+  --border-color: #FF5E00;
+}
+
+.input-item ion-input {
+  --placeholder-color: #555;
+  --color: #F5F5F5;
+  font-size: 1rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+}
+
+.input-hint {
+  margin: 4px 0 0;
+  color: #555;
+  font-size: 0.7rem;
+  letter-spacing: 0.02em;
+}
+
+.terms-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 4px 0 14px;
+  color: #A3A3A3;
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+.terms-checkbox ion-checkbox {
+  flex-shrink: 0;
+  margin-top: 2px;
+  --size: 20px;
+  --border-color: #2A2A2A;
+  --border-radius: 4px;
+  --background-checked: #FF5E00;
+  --border-color-checked: #FF5E00;
+  --checkmark-color: #000;
+}
+
+.terms-checkbox a {
+  color: #FF5E00;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.register-button {
+  width: 100%;
+  height: 44px;
+  --background: #FF5E00;
+  --background-hover: #FF7A33;
+  --background-activated: #CC4D00;
+  --border-radius: 6px;
+  --box-shadow: 0 6px 20px rgba(255, 94, 0, 0.3);
+  --color: #000;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+}
+
+.register-button:hover {
+  transform: translateY(-2px);
+  --box-shadow: 0 8px 25px rgba(255, 94, 0, 0.4);
+}
+
+.divider {
+  max-width: 520px;
+  margin: 14px auto 10px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.divider-line {
+  flex: 1;
+  height: 1px;
+  background: #2A2A2A;
+}
+
+.divider span {
+  color: #555;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.google-button {
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  height: 42px;
+  --background: #141414;
+  --background-hover: #1A1A1A;
+  --border-color: #2A2A2A;
+  --border-width: 1px;
+  --border-radius: 6px;
+  --color: #F5F5F5;
+  --box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: none;
+}
+
+.google-icon {
+  margin-right: 10px;
+  display: block;
+}
+
+.signin-link {
+  max-width: 520px;
+  margin: 10px auto 0;
+  text-align: center;
+  color: #666;
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+}
+
+.link-button {
+  --color: #FF5E00;
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.error-message {
+  background: rgba(255, 0, 0, 0.1);
+  color: #ff4d4d;
+  border: 1px solid #ff4d4d;
+  padding: 12px 16px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* ---------- RIGHT VISUAL PANEL ---------- */
+.register-visual-panel {
+  position: relative;
+  min-height: 100%;
+  background: #050505;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 48px;
+  border-left: 1px solid #1a1a1a;
+}
+
+.visual-glow {
+  position: absolute;
+  top: -80px;
+  right: -80px;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 94, 0, 0.15), transparent 70%);
+  pointer-events: none;
+}
+
+.lifter-photo {
+  width: min(380px, 80%);
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+  position: relative;
+  z-index: 1;
+  border: 1px solid #2A2A2A;
+  filter: none; /* I-balik ang tinuod nga color */
+}
+
+.visual-chip {
+  position: absolute;
+  background: #141414;
+  border: 1px solid #2A2A2A;
+  border-radius: 8px;
+  padding: 12px 18px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #F5F5F5;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  z-index: 2;
+}
+
+.chip-top {
+  top: 64px;
+  left: 40px;
+}
+
+.chip-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #FF5E00;
+  flex-shrink: 0;
+}
+
+.chip-bottom {
+  bottom: 96px;
+  right: 34px;
+  flex-direction: row;
+  align-items: center;
+}
+
+.chip-bottom .flame {
+  font-size: 20px;
+}
+
+.chip-bottom b {
+  display: block;
+  font-size: 0.9rem;
+}
+
+.chip-bottom small {
+  color: #A3A3A3;
+  font-weight: 600;
+  font-size: 0.72rem;
+}
+
+.visual-ring {
+  position: absolute;
+  top: 130px;
+  right: 56px;
+  z-index: 2;
+}
+
+.visual-caption {
+  position: relative;
+  z-index: 1;
+  margin-top: 40px;
+  max-width: 320px;
+  text-align: center;
+  color: #A3A3A3;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.visual-caption strong {
+  color: #F5F5F5;
+  font-weight: 800;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 1000px) {
+  .register-shell {
+    grid-template-columns: 1fr;
+  }
+  .register-visual-panel {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .register-shell {
+    height: 100dvh;
+  }
+
+  .register-container {
+    height: 100dvh;
+    padding-left: 20px;
+    padding-right: 20px;
+    justify-content: center;
+  }
+
+  .register-header {
+    padding-top: 6px;
+  }
+
+  .register-heading {
+    padding-top: 8px;
+  }
+
+  .register-heading h2 {
+    font-size: clamp(1.3rem, 6vw, 1.7rem);
+  }
+
+  .name-row {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .terms-checkbox {
+    font-size: 0.72rem;
+  }
+
+  .signin-link {
+    font-size: 0.75rem;
+  }
+}
+.progress-stats { display: flex; justify-content: space-between; gap: 12px; text-align: center; margin-bottom: 8px; }
+.progress-stats strong { display: block; font-size: 22px; }
+.progress-stat-label { display: block; font-size: 12px; color: #aaa; text-transform: uppercase; letter-spacing: 1px; }

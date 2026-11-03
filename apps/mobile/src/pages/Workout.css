@@ -1,0 +1,509 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+.wo-shell {
+  --background: #0A0A0A;
+  font-family: 'Inter', sans-serif;
+  color: #F5F5F5;
+  min-height: 100vh;
+}
+
+/* Top Header (Shared) */
+.db-top-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 32px;
+  background: #050505;
+  border-bottom: 1px solid #2A2A2A;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.db-top-brand {
+  font-family: 'Inter', sans-serif;
+  font-weight: 900;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  color: #F5F5F5;
+}
+
+.db-top-brand span { color: #FF5E00; }
+
+.db-top-nav {
+  display: flex;
+  gap: 28px;
+}
+
+.db-top-nav-item {
+  text-decoration: none;
+  color: #666;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: color 0.2s;
+}
+
+.db-top-nav-item:hover { color: #F5F5F5; }
+.db-top-nav-item.active { color: #FF5E00; }
+
+.db-logout-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  background: transparent;
+  border: 1px solid #2A2A2A;
+  color: #F5F5F5;
+  padding: 0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.db-logout-btn:hover {
+  background: #FF5E00;
+  color: #000;
+  border-color: #FF5E00;
+}
+
+/* Workout Content */
+.wo-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 32px;
+}
+
+.wo-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.wo-header h1 {
+  font-size: 2.5rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  margin: 0 0 8px 0;
+}
+
+.wo-header p {
+  color: #A3A3A3;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.wo-kcal-projection {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  gap: 3px;
+  flex-shrink: 0;
+}
+
+.wo-kcal-projection-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  color: #888;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  margin-bottom: 2px;
+}
+
+.wo-kcal-projection-row {
+  font-size: 0.82rem;
+  color: #A3A3A3;
+  font-weight: 500;
+}
+
+.wo-kcal-projection-row b {
+  color: #FF5E00;
+  font-weight: 800;
+}
+
+@media (max-width: 640px) {
+  .wo-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .wo-kcal-projection {
+    align-items: flex-start;
+    text-align: left;
+    margin-top: 8px;
+  }
+}
+
+/* AI Suggestion Box */
+.wo-ai-box {
+  background: #141414;
+  border: 1px solid #FF5E00;
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.wo-ai-left {
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #2A2A2A;
+  padding-right: 24px;
+}
+
+.wo-ai-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: #888;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.wo-ai-bmi {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #FF5E00;
+  line-height: 1;
+  margin: 4px 0;
+}
+
+.wo-ai-cat {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #F5F5F5;
+  text-transform: uppercase;
+}
+
+.wo-ai-right strong {
+  color: #F5F5F5;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+}
+
+.wo-ai-right p {
+  color: #A3A3A3;
+  font-size: 0.95rem;
+  margin: 6px 0 0 0;
+}
+
+.wo-condition-inline {
+  margin: 10px 0 0 0 !important;
+  padding-top: 10px;
+  border-top: 1px solid #2A2A2A;
+  font-size: 0.8rem !important;
+  color: #A3A3A3 !important;
+}
+
+.wo-condition-inline-label {
+  color: #ffc107;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+}
+
+/* Tabs */
+.wo-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.wo-tab {
+  background: transparent;
+  border: 1px solid #2A2A2A;
+  color: #A3A3A3;
+  padding: 10px 24px;
+  border-radius: 6px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.wo-tab.active {
+  background: #FF5E00;
+  border-color: #FF5E00;
+  color: #000;
+}
+
+/* Workout Cards */
+.wo-card {
+  background: #141414;
+  border: 1px solid #2A2A2A;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s;
+}
+
+.wo-ai-highlight {
+  border-color: rgba(255, 94, 0, 0.5);
+  background: linear-gradient(145deg, #141414, #1a1a1a);
+}
+
+.wo-info h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 0 0 6px 0;
+  text-transform: uppercase;
+}
+
+.wo-info p {
+  color: #A3A3A3;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.wo-badge-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.wo-badge {
+  background: rgba(255, 255, 255, 0.1);
+  color: #F5F5F5;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.wo-ai-tag {
+  background: #FF5E00;
+  color: #000;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.wo-walk-card {
+  background: #141414;
+  border: 1px solid #2A2A2A;
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.wo-walk-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.wo-walk-title {
+  font-size: 1rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: #F5F5F5;
+}
+
+.wo-walk-date {
+  font-size: 0.8rem;
+  color: #666;
+  font-weight: 600;
+}
+
+.wo-walk-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.wo-walk-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 12px 4px;
+  border-radius: 8px;
+  background: #0A0A0A;
+}
+
+.wo-walk-stat ion-icon {
+  font-size: 20px;
+  color: #FF5E00;
+  margin-bottom: 6px;
+}
+
+.wo-walk-stat h2 {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: #F5F5F5;
+}
+
+.wo-walk-stat p {
+  margin: 2px 0 0;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #A3A3A3;
+}
+
+.wo-walk-route {
+  margin-top: 16px;
+  height: 90px;
+  border-radius: 8px;
+  background:
+    repeating-linear-gradient(
+      135deg,
+      #FF5E00 0px,
+      #FF5E00 2px,
+      transparent 2px,
+      transparent 14px
+    ),
+    #0A0A0A;
+  opacity: 0.35;
+}
+
+@media (max-width: 480px) {
+  .wo-walk-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+}
+
+
+/* Medical History Warning Styles */
+.wo-health-box {
+  background: rgba(255, 193, 7, 0.1);
+  border: 1px solid #ffc107;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.wo-health-box strong {
+  color: #ffc107;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.wo-health-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 10px 0;
+}
+
+.wo-health-tag {
+  background: #ffc107;
+  color: #000;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  text-transform: uppercase;
+}
+
+.wo-health-box p {
+  color: #A3A3A3;
+  font-size: 0.85rem;
+  margin: 6px 0 0 0;
+}
+
+.wo-card.wo-risk {
+  opacity: 0.55;
+  border-color: #dc3545;
+}
+
+.wo-risk-tag {
+  background: #dc3545;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+/* Subtle background image, dark overlay so it doesn't overpower the theme */
+.db-bg-wrapper {
+  min-height: calc(100vh - 87px);
+  background-image:
+    linear-gradient(180deg, rgba(10, 10, 10, 0.90) 0%, rgba(10, 10, 10, 0.94) 100%),
+    var(--db-bg-image);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+/* Desktop/tablet — 2-column grid so long workout lists need less scrolling */
+@media (min-width: 900px) {
+  .wo-container {
+    max-width: 1100px;
+  }
+
+  .wo-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .wo-card {
+    margin-bottom: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .wo-badge-container {
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+/* ==============================================
+   MOBILE ONLY — hide top nav, leave room for global bottom nav
+============================================== */
+@media (max-width: 640px) {
+  .db-top-header {
+    padding: 16px 20px;
+    overflow: hidden;
+  }
+
+  .db-top-brand {
+    font-size: 1.05rem;
+  }
+
+  .db-top-nav {
+    display: none !important;
+  }
+
+  .wo-container {
+    padding-bottom: 100px;
+  }
+}
+/* Per-exercise kcal chip — small, muted, clean */
+.wo-kcal-chip {
+  font-size: 0.72rem;
+  color: #666;
+  font-weight: 600;
+}

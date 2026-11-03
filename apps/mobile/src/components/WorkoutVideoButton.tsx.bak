@@ -1,0 +1,101 @@
+import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { fetchWorkoutVideos, getWorkoutVideoUrl, type WorkoutVideo } from '../lib/uploaderApi';
+import './WorkoutVideoButton.css';
+
+// Usa ra ka load sa tanang videos, gamiton balik sa matag button
+let cache: Record<string, WorkoutVideo> | null = null;
+let pending: Promise<Record<string, WorkoutVideo>> | null = null;
+
+const loadVideos = (): Promise<Record<string, WorkoutVideo>> => {
+  if (cache) return Promise.resolve(cache);
+  if (!pending) {
+    pending = fetchWorkoutVideos()
+      .then((list) => {
+        cache = Object.fromEntries(list.map((v) => [v.workoutName, v]));
+        return cache;
+      })
+      .catch(() => {
+        pending = null;
+        return {} as Record<string, WorkoutVideo>;
+      });
+  }
+  return pending;
+};
+
+const WorkoutVideoButton: React.FC<{ workoutName: string }> = ({ workoutName }) => {
+  const [open, setOpen] = useState(false);
+  const [video, setVideo] = useState<WorkoutVideo | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    loadVideos().then((map) => {
+      if (!cancelled) setVideo(map[workoutName] ?? null);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [workoutName]);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [open]);
+
+  return (
+    <>
+      <button
+        type="button"
+        className="wvb-btn"
+        aria-label={`Watch demo: ${workoutName}`}
+        onClick={(e) => {
+          e.stopPropagation();
+          setOpen(true);
+        }}
+      >
+        <svg className="wvb-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M8 5v14l11-7z" fill="currentColor" />
+        </svg>
+        Demo
+      </button>
+
+      {open &&
+        createPortal(
+          <div className="wvb-overlay" onClick={() => setOpen(false)}>
+            <div
+              className="wvb-dialog"
+              role="dialog"
+              aria-modal="true"
+              aria-label={`${workoutName} demo`}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="wvb-head">
+                <h3 className="wvb-title">{workoutName}</h3>
+                <button type="button" className="wvb-close" aria-label="Close" onClick={() => setOpen(false)}>
+                  &times;
+                </button>
+              </div>
+              {video ? (
+                <video
+                  className="wvb-video"
+                  src={getWorkoutVideoUrl(video.videoPath, video.uploadedAt)}
+                  controls
+                  autoPlay
+                  playsInline
+                />
+              ) : (
+                <p className="wvb-empty">No demo video yet for this workout.</p>
+              )}
+            </div>
+          </div>,
+          document.body
+        )}
+    </>
+  );
+};
+
+export default WorkoutVideoButton;

@@ -1,0 +1,62 @@
+.cal-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.cal-stats .progress-card {
+  margin-bottom: 16px;
+}
+
+.cal-stat .progress-entry-weight {
+  color: #ff5e00;
+  font-size: 22px;
+}
+
+.cal-table-wrap {
+  overflow-x: auto;
+  padding: 8px 16px;
+}
+
+.cal-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.cal-table th {
+  text-align: left;
+  padding: 10px 8px;
+  color: #ff5e00;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-bottom: 1px solid #333;
+}
+
+.cal-table td {
+  padding: 10px 8px;
+  border-bottom: 1px solid #222;
+  color: #e6e6e6;
+}
+
+.cal-table .num {
+  text-align: right;
+}
+
+.cal-plan {
+  text-transform: capitalize;
+  color: #aaa;
+}
+
+.cal-total td {
+  font-weight: 800;
+  color: #fff;
+  background: rgba(255, 94, 0, 0.1);
+}
+
+@media (max-width: 520px) {
+  .cal-stats {
+    grid-template-columns: 1fr;
+  }
+}

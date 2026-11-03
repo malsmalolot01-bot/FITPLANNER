@@ -1,0 +1,156 @@
+.cb-fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #FF5E00;
+  color: #000;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(255, 94, 0, 0.4);
+  z-index: 2000;
+  transition: transform 0.2s;
+}
+
+.cb-fab:hover {
+  transform: scale(1.08);
+}
+
+.cb-window {
+  position: fixed;
+  bottom: 90px;
+  right: 24px;
+  width: 340px;
+  max-width: 90vw;
+  height: 460px;
+  max-height: 70vh;
+  background: #141414;
+  border: 1px solid #2A2A2A;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  z-index: 2000;
+  overflow: hidden;
+  font-family: 'Inter', sans-serif;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.cb-header {
+  background: #050505;
+  color: #F5F5F5;
+  padding: 14px 16px;
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  border-bottom: 1px solid #2A2A2A;
+}
+
+.cb-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cb-msg {
+  max-width: 85%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.cb-msg-bot {
+  background: #0A0A0A;
+  color: #F5F5F5;
+  align-self: flex-start;
+  border: 1px solid #2A2A2A;
+}
+
+.cb-msg-user {
+  background: #FF5E00;
+  color: #000;
+  align-self: flex-end;
+  font-weight: 600;
+}
+
+.cb-quick {
+  padding: 0 14px 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.cb-quick button {
+  flex: 1 1 calc(50% - 6px);
+  background: transparent;
+  border: 1px solid #FF5E00;
+  color: #FF5E00;
+  padding: 8px 6px;
+  border-radius: 8px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+.cb-input-row {
+  display: flex;
+  border-top: 1px solid #2A2A2A;
+  padding: 10px;
+  gap: 8px;
+}
+
+.cb-input-row input {
+  flex: 1;
+  background: #0A0A0A;
+  border: 1px solid #2A2A2A;
+  border-radius: 8px;
+  padding: 10px 12px;
+  color: #F5F5F5;
+  font-size: 0.85rem;
+}
+
+.cb-input-row input:focus {
+  outline: none;
+  border-color: #FF5E00;
+}
+
+.cb-send-btn {
+  background: #FF5E00;
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* ==============================================
+   MOBILE ONLY — chat opens via bottom nav instead of the floating button
+============================================== */
+@media (max-width: 640px) {
+  .cb-fab {
+    display: none;
+  }
+
+  .cb-window {
+    left: 12px;
+    right: 12px;
+    width: auto;
+    max-width: none;
+    bottom: calc(78px + max(12px, env(safe-area-inset-bottom)));
+    height: 60vh;
+    max-height: 60vh;
+  }
+}
