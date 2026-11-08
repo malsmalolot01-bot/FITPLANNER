@@ -7,7 +7,7 @@ import { useIsMobile } from '../lib/useIsMobile';
 import { getFoodRestrictions, getMedicalHistory, getProfile } from '../lib/api';
 import dashboardBg from '../assets/dashboard-bg.webp';
 import ProgressMenu from '../components/ProgressMenu';
-import './AiSuggestion.css';
+import './Aisuggestion.css';
 
 const AISuggestion: React.FC = () => {
   const navigate = useNavigate();
