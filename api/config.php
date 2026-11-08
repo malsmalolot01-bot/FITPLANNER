@@ -13,6 +13,10 @@ $allowedOrigins = [
     'capacitor://localhost',
     'ionic://localhost',
 ];
+$extraOrigins = getenv('FITPLANNER_ALLOWED_ORIGINS');
+if ($extraOrigins) {
+    $allowedOrigins = array_merge($allowedOrigins, array_map('trim', explode(',', $extraOrigins)));
+}
 
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 if (in_array($origin, $allowedOrigins, true)) {
@@ -37,11 +41,17 @@ function database(): PDO
 
     $dsn = "mysql:host={$host};port={$port};dbname={$name};charset=utf8mb4";
 
-    return new PDO($dsn, $user, $password, [
+    $options = [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         PDO::ATTR_EMULATE_PREPARES => false,
-    ]);
+    ];
+    $sslCa = getenv('FITPLANNER_DB_SSL_CA');
+    if ($sslCa) {
+        $options[PDO::MYSQL_ATTR_SSL_CA] = $sslCa;
+    }
+
+    return new PDO($dsn, $user, $password, $options);
 }
 
 function create_auth_token(PDO $pdo, string $userId): string
