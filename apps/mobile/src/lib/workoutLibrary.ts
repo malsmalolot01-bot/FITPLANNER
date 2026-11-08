@@ -26,6 +26,9 @@ export const CATEGORY_AVOID: Record<string, string[]> = {
 };
 
 export const gymWorkouts: WorkoutItem[] = [
+  // Warm-up — always shown before the routine, dili apil sa AI goal-based rotation
+  { name: 'Stretching (Before Workout)', target: 'Full Body Mobility', meta: '5-10 mins light stretches', type: 'Warm-up', risks: [], calories: 0 },
+
   // Muscle Gain
   { name: 'Bench Press', target: 'Chest, Triceps', meta: '4 sets x 8 reps', type: 'Muscle Gain', risks: ['Shoulder / Arm Injury', 'Recent Surgery / Recovering from Injury'], calories: 40 },
   { name: 'Squats', target: 'Quads, Glutes', meta: '4 sets x 10 reps', type: 'Muscle Gain', risks: ['ACL / Knee Injury', 'Back Pain / Spine Issue', 'Recent Surgery / Recovering from Injury'], calories: 55 },
@@ -56,6 +59,9 @@ export const gymWorkouts: WorkoutItem[] = [
 ];
 
 export const homeWorkouts: WorkoutItem[] = [
+  // Warm-up — always shown before the routine, dili apil sa AI goal-based rotation
+  { name: 'Stretching (Before Workout)', target: 'Full Body Mobility', meta: '5-10 mins light stretches', type: 'Warm-up', risks: [], calories: 0 },
+
   // Muscle Gain
   { name: 'Push-ups', target: 'Chest, Triceps', meta: '4 sets x 20 reps', type: 'Muscle Gain', risks: ['Shoulder / Arm Injury', 'Recent Surgery / Recovering from Injury'], calories: 50 },
   { name: 'Pike Push-ups', target: 'Shoulders', meta: '3 sets x 12 reps', type: 'Muscle Gain', risks: ['Shoulder / Arm Injury'], calories: 30 },

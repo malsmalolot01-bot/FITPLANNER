@@ -34,6 +34,8 @@ const AdminDashboard: React.FC<Props> = ({ tab = 'overview' }) => {
   const [totalAccounts, setTotalAccounts] = useState(0);
   const [users, setUsers] = useState<AdminClient[]>([]);
   const [systemLogs, setSystemLogs] = useState<ActivityLog[]>([]);
+  const [logsPage, setLogsPage] = useState(1);
+  const LOGS_PER_PAGE = 15;
 
   useEffect(() => {
     if (!currentUser?.id) return;
@@ -60,6 +62,13 @@ const AdminDashboard: React.FC<Props> = ({ tab = 'overview' }) => {
       })
       .catch(err => console.error("Error fetching stats:", err));
   }, [currentUser?.id, currentUser?.token]);
+
+  useEffect(() => {
+    setLogsPage(1);
+  }, [systemLogs]);
+
+  const totalLogsPages = Math.max(1, Math.ceil(systemLogs.length / LOGS_PER_PAGE));
+  const pagedLogs = systemLogs.slice((logsPage - 1) * LOGS_PER_PAGE, logsPage * LOGS_PER_PAGE);
 
   const handlePictureUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -199,12 +208,58 @@ const AdminDashboard: React.FC<Props> = ({ tab = 'overview' }) => {
                     <div className="log-time">--</div>
                   </div>
                 ) : (
-                  systemLogs.map((log, index) => (
-                    <div key={index} className="log-item">
-                      <div className="log-text">{log.text}</div>
-                      <div className="log-time">{log.time}</div>
-                    </div>
-                  ))
+                  <>
+                    {pagedLogs.map((log, index) => (
+                      <div key={index} className="log-item">
+                        <div className="log-text">{log.text}</div>
+                        <div className="log-time">{log.time}</div>
+                      </div>
+                    ))}
+
+                    {totalLogsPages > 1 && (
+                      <div className="pagination">
+                        <button
+                          type="button"
+                          className="page-btn"
+                          disabled={logsPage === 1}
+                          onClick={() => setLogsPage((p) => Math.max(1, p - 1))}
+                        >
+                          Prev
+                        </button>
+
+                        {Array.from({ length: totalLogsPages }, (_, i) => i + 1)
+                          .filter((p) => p === 1 || p === totalLogsPages || Math.abs(p - logsPage) <= 1)
+                          .reduce<(number | 'ellipsis')[]>((acc, p, i, arr) => {
+                            if (i > 0 && p - (arr[i - 1] as number) > 1) acc.push('ellipsis');
+                            acc.push(p);
+                            return acc;
+                          }, [])
+                          .map((p, i) =>
+                            p === 'ellipsis' ? (
+                              <span key={`ellipsis-${i}`} className="page-ellipsis">…</span>
+                            ) : (
+                              <button
+                                key={p}
+                                type="button"
+                                className={`page-btn ${p === logsPage ? 'active' : ''}`}
+                                onClick={() => setLogsPage(p)}
+                              >
+                                {p}
+                              </button>
+                            )
+                          )}
+
+                        <button
+                          type="button"
+                          className="page-btn"
+                          disabled={logsPage === totalLogsPages}
+                          onClick={() => setLogsPage((p) => Math.min(totalLogsPages, p + 1))}
+                        >
+                          Next
+                        </button>
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
             </>

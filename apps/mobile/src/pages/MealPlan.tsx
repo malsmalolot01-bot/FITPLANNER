@@ -6,7 +6,8 @@ import { useIsMobile } from '../lib/useIsMobile';
 import dashboardBg from '../assets/dashboard-bg.webp';
 import ProgressMenu from '../components/ProgressMenu';
 import './MealPlan.css';
-import { loadFoodRestrictions, applyRestrictions } from '../lib/foodRestrictions';
+import { loadFoodRestrictions, applyRestrictions, MEAL_PLANS, type Meal } from '../lib/foodRestrictions';
+import { getDayOfYear } from '../lib/workoutLibrary';
 
 const MealPlan: React.FC = () => {
   const navigate = useNavigate();
@@ -21,35 +22,19 @@ const MealPlan: React.FC = () => {
   const profile = JSON.parse(localStorage.getItem('userProfile') || '{}');
   const userGoal = profile.goal || 'Fitness';
 
-  // Meal Suggestions base sa GOAL
-  let meals = [];
-  let dietFocus = 'Maintenance Calories';
+  // Meal Suggestions base sa GOAL, ug nagbag-o kada adlaw (day-seeded rotation,
+  // parehas sa pattern nga gigamit sa AI Workout Suggestion page).
+  const dietFocus =
+    userGoal === 'Muscle Gain' ? 'Caloric Surplus (+300 calories)'
+    : userGoal === 'Fat Loss' ? 'Calorie Deficit (-500 calories / Eat Less)'
+    : 'Maintenance Calories (Eat Clean)'; // Fitness / Sexy / Maintenance
 
-  if (userGoal === 'Muscle Gain') {
-    dietFocus = 'Caloric Surplus (+300 calories)';
-    meals = [
-      { name: 'Breakfast', desc: 'Oatmeal with whole milk, peanut butter, and 4 boiled eggs', cal: '~750 kcal' },
-      { name: 'Lunch', desc: 'Grilled chicken breast (250g), large portion of brown rice, avocado', cal: '~900 kcal' },
-      { name: 'Dinner', desc: 'Salmon steak with sweet potatoes and olive oil dressing', cal: '~750 kcal' },
-      { name: 'Snack', desc: 'Mass gainer shake, mixed nuts, and 2 bananas', cal: '~600 kcal' }
-    ];
-  } else if (userGoal === 'Fat Loss') {
-    dietFocus = 'Calorie Deficit (-500 calories / Eat Less)';
-    meals = [
-      { name: 'Breakfast', desc: 'Black coffee, 2 boiled eggs, and a small apple (No heavy carbs)', cal: '~200 kcal' },
-      { name: 'Lunch', desc: 'Grilled chicken salad with mixed greens, tomatoes, cucumber (No dressing/rice)', cal: '~300 kcal' },
-      { name: 'Dinner', desc: 'Lean beef steak (150g) with steamed broccoli and cauliflower', cal: '~350 kcal' },
-      { name: 'Snack', desc: 'Celery sticks or green tea (Strictly no sugar)', cal: '~50 kcal' }
-    ];
-  } else { // Fitness / Sexy / Maintenance
-    dietFocus = 'Maintenance Calories (Eat Clean)';
-    meals = [
-      { name: 'Breakfast', desc: 'Scrambled eggs (3), whole wheat toast, black coffee', cal: '~400 kcal' },
-      { name: 'Lunch', desc: 'Grilled turkey wrap with spinach, tomatoes, and light hummus', cal: '~450 kcal' },
-      { name: 'Dinner', desc: 'Baked salmon, quinoa, and steamed broccoli', cal: '~500 kcal' },
-      { name: 'Snack', desc: 'Greek yogurt with a handful of almonds', cal: '~200 kcal' }
-    ];
-  }
+  const mealPool = MEAL_PLANS[userGoal] ?? MEAL_PLANS.Fitness;
+  const daySeed = getDayOfYear(new Date());
+  const meals: Meal[] = ['Breakfast', 'Lunch', 'Dinner', 'Snack'].map((slot) => {
+    const options = mealPool[slot];
+    return options[daySeed % options.length];
+  });
 
   // Ilisan ang mga meal nga naay bawal nga pagkaon
   const restrictions = loadFoodRestrictions();

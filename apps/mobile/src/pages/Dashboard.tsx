@@ -93,6 +93,7 @@ const subscriptionEndDate = subscription?.subscription_end
   const selectedHomePicks = getPicksForDay(homeWorkouts, dayOffset, userGoal, userConditions, userCategory, intensitySettings.pickCount, intensitySettings.restDays);
   const isRestDay = selectedGymPicks.isRest && selectedHomePicks.isRest;
   const activePicks = planTab === 'gym' ? selectedGymPicks : selectedHomePicks;
+  const stretchItem = (planTab === 'gym' ? gymWorkouts : homeWorkouts).find((w) => w.type === 'Warm-up');
 
   const isFuture = dayOffset > 0;
   const selectedKey = toDateKey(selectedDate);
@@ -290,6 +291,26 @@ const subscriptionEndDate = subscription?.subscription_end
                     Burned: <strong>{burnedForDay}</strong> kcal / planned {plannedKcal} kcal
                     {isFuture && ' (upcoming day)'}
                   </p>
+
+                  {stretchItem && (
+                    <div className="db-exercise-item" key={stretchItem.name}>
+                      <span className="db-ex-left">
+                        <input
+                          type="checkbox"
+                          className="db-ex-check"
+                          checked={isDone(log, selectedKey, stretchItem.name)}
+                          disabled={isFuture}
+                          onChange={() => handleToggle(stretchItem.name, stretchItem.calories)}
+                          aria-label={`Mark ${stretchItem.name} as done`}
+                        />
+                        <span className={`db-ex-name ${isDone(log, selectedKey, stretchItem.name) ? 'done' : ''}`}>{stretchItem.name}</span>
+                        <WorkoutVideoButton workoutName={stretchItem.name} />
+                      </span>
+                      <span className="db-ex-right">
+                        <span className="db-ex-meta">{stretchItem.meta}</span>
+                      </span>
+                    </div>
+                  )}
 
                   {activePicks.picks.length === 0 ? (
                     <p className="db-rest-note">No exercises available for your current profile.</p>

@@ -6,6 +6,7 @@ import { logout } from '../lib/auth';
 import { useIsMobile } from '../lib/useIsMobile';
 import dashboardBg from '../assets/dashboard-bg.webp';
 import ProgressMenu from '../components/ProgressMenu';
+import WorkoutVideoButton from '../components/WorkoutVideoButton';
 import { gymWorkouts, homeWorkouts, isRisky, getPicksForDay, getTotalCalories, getIntensitySettings, fitsIntensity } from '../lib/workoutLibrary';
 import './Workout.css';
 
@@ -41,11 +42,15 @@ const Workout: React.FC = () => {
   const twoWeekCalories = estimatedCalories * 14;
   const monthlyCalories = estimatedCalories * 30;
 
-  const workouts = [...baseWorkouts].sort((a, b) => {
-    if (a.type === userGoal && b.type !== userGoal) return -1;
-    if (a.type !== userGoal && b.type === userGoal) return 1;
-    return 0;
-  });
+  const stretchItem = baseWorkouts.find((w) => w.type === 'Warm-up');
+
+  const workouts = [...baseWorkouts]
+    .filter((w) => w.type !== 'Warm-up')
+    .sort((a, b) => {
+      if (a.type === userGoal && b.type !== userGoal) return -1;
+      if (a.type !== userGoal && b.type === userGoal) return 1;
+      return 0;
+    });
 
   return (
     <IonPage>
@@ -138,6 +143,20 @@ const Workout: React.FC = () => {
             </button>
           </div>
 
+          {stretchItem && (
+            <div className="wo-card wo-stretch-card">
+              <div className="wo-info">
+                <h3>{stretchItem.name}</h3>
+                <p>{stretchItem.target}</p>
+              </div>
+              <div className="wo-badge-container">
+                <span className="wo-badge">Warm-up</span>
+                <span className="wo-badge">{stretchItem.meta}</span>
+                <WorkoutVideoButton workoutName={stretchItem.name} />
+              </div>
+            </div>
+          )}
+
           <div className="wo-list">
             {workouts.map((wo, index) => {
               const risky = isRisky(wo, userConditions, userCategory);
@@ -159,6 +178,7 @@ const Workout: React.FC = () => {
                     )}
                     <span className="wo-badge">{wo.meta}</span>
                     <span className="wo-kcal-chip">~{wo.calories} kcal</span>
+                    <WorkoutVideoButton workoutName={wo.name} />
                   </div>
                 </div>
               );
